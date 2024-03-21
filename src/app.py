@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, User, UserFavorite
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -66,6 +66,64 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
+
+
+@app.route('/user/login', methods=['POST'])
+def login_test():
+        request_body=request.json
+        
+        test_user= User.query.filter_by(email=request_body[0]).first().id
+        
+        if(test_user):
+            test_password= User.query.filter_by(email=request_body[0]).first().password
+            test_name= User.query.filter_by(email=request_body[0]).first().name
+           
+            if str(test_password)==request_body[1]:  
+                test= {
+                     "user": test_name,
+                     "id": test_user
+                      }         
+                return jsonify(test)
+            else:
+                return jsonify(f"Incorrect email or password"), 400
+                 
+                       
+        else:
+              return jsonify(f"Incorrect email or password"), 400
+       
+        
+@app.route('/user/<id>/favorite', methods=['GET'])
+def get_favofuser(id):
+
+    fav= UserFavorite.query.filter_by(user_id = id)
+    test2 = list(map(lambda x: x.serialize(), fav))
+   
+    return  jsonify(test2)
+
+@app.route('/user/new', methods=['POST'])
+def add_newuser():
+        request_body=request.json
+        
+        test_user= User.query.filter_by(email=request_body[1]).first()
+    
+        if(test_user):
+             return jsonify(f"User already exists"), 500
+        
+        else:
+             newU=User ( name=request_body[0], email=request_body[1],password= request_body[2] )
+             db.session.add(newU)
+             db.session.commit()
+             return jsonify(f"Success"), 200
+
+
+@app.route('/user/<id>/favorite/<idf>/h', methods=['DELETE'])
+def delete_fav2(id,idf):
+        test= UserFavorite.query.filter_by(user_id=id, people_id=idf).first()
+        db.session.delete(test)
+        db.session.commit()
+        return jsonify(f"Success"), 200
+
+
 
 
 # this only runs if `$ python src/main.py` is executed
