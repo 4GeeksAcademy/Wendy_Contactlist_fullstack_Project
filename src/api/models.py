@@ -28,9 +28,9 @@ class Contact(db.Model):
 
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
     name = db.Column(db.String(120), unique=False, nullable=False)
-    phone = db.Column(db.String(10), unique=True, nullable=False)
+    phone = db.Column(db.String(20), unique=True, nullable=False)
     address = db.Column(db.String(120), unique=False, nullable=False)
-    email= db.Column(db.String(10), unique=True, nullable=False)
+    email= db.Column(db.String(80), unique=True, nullable=False)
     user_link= db.relationship('User')
     
     def __repr__(self):
@@ -40,9 +40,10 @@ class Contact(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "phone": self.gender,
+            "phone": self.phone,
             "address": self.address,
-            "email":self.email
+            "email":self.email,
+            "user_id": self.user_id
           
            
         }

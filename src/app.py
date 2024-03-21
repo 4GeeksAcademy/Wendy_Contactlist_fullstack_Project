@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db, User, UserFavorite
+from api.models import db, User, UserFavorite, Contact
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -92,11 +92,11 @@ def login_test():
               return jsonify(f"Incorrect email or password"), 400
        
         
-@app.route('/user/<id>/favorite', methods=['GET'])
-def get_favofuser(id):
+@app.route('/user/<id>/contact', methods=['GET'])
+def get_conofuser(id):
 
-    fav= UserFavorite.query.filter_by(user_id = id)
-    test2 = list(map(lambda x: x.serialize(), fav))
+    contact= Contact.query.filter_by(user_id = id)
+    test2 = list(map(lambda x: x.serialize(), contact))
    
     return  jsonify(test2)
 
@@ -123,6 +123,35 @@ def delete_fav2(id,idf):
         db.session.commit()
         return jsonify(f"Success"), 200
 
+@app.route('/favorite', methods=['GET'])
+def get_all_favorite():
+    
+    fav = UserFavorite.query.all()
+    all_fav = list(map(lambda x: x.serialize(), fav))
+    return jsonify(all_fav), 200
+
+@app.route('/user/all', methods=['GET'])
+def get_all_user():
+    
+    user = User.query.all()
+    all_people = list(map(lambda x: x.serialize(), user))
+    return jsonify(all_people), 200
+
+
+@app.route('/contact/new', methods=['POST'])
+def add_newcontact():
+        request_body=request.json
+        
+        test_contact= Contact.query.filter_by(email=request_body[1]).first()
+    
+        if(test_contact):
+             return jsonify(f"Contact already exists"), 500
+        
+        else:
+             newC=Contact ( name=request_body[0], email=request_body[1],phone= request_body[2],address=request_body[3], user_id=request_body[4])
+             db.session.add(newC)
+             db.session.commit()
+             return jsonify(f"Success"), 200
 
 
 
