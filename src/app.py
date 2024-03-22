@@ -92,13 +92,15 @@ def login_test():
               return jsonify(f"Incorrect email or password"), 400
        
         
-@app.route('/user/<id>/contact', methods=['GET'])
+@app.route('/user/<int:id>/contact', methods=['GET'])
 def get_conofuser(id):
 
-    contact= Contact.query.filter_by(user_id = id)
-    test2 = list(map(lambda x: x.serialize(), contact))
-   
-    return  jsonify(test2)
+    test= Contact.query.filter_by(user_id = id)
+    test2 = list(map(lambda x: x.serialize(), test))
+    return jsonify('It works')
+   # return  jsonify(test2)
+
+
 
 @app.route('/user/new', methods=['POST'])
 def add_newuser():

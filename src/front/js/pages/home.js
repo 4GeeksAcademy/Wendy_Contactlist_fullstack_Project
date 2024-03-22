@@ -13,11 +13,7 @@ export const Home = () => {
     const navigate = useNavigate();
     const context = useContext(AppContext);
 
-    // useEffect(() => {
-
-    // }, []);
-
-
+   
 
 // 	const signUpButton = document.getElementById('signUp');
 // const signInButton = document.getElementById('signIn');
@@ -31,6 +27,45 @@ export const Home = () => {
 // 	container.classList.remove("right-panel-active");
 // });
 
+useEffect(() => {
+     let test= context.currentUser[0];
+    let test2='https://verbose-umbrella-x55q9xw6jqpwc44-3001.app.github.dev/'+test+'/contact';
+    console.log(test2)
+    fetch(test2)
+        .then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            // Read the response as JSON
+            return response.json();
+        })
+        .then(responseAsJson => {
+            // Do stuff with the JSONified response
+            let test = []
+            let final = []
+            test = [...responseAsJson.results];
+            console.log(test)
+            test.forEach((elm) => {
+                let test2 = {
+                    id: elm.id,
+                    name: elm.name,
+                    phone: elm.phone,
+                    address: elm.address,
+                    email: elm.email
+                }
+                final.push(test2)
+            })
+             context.setListC(final);
+
+        })
+        .catch(error => {
+            console.log('Looks like there was a problem: \n', error);
+        });
+
+
+}, []);
+
+
 function delete_contact(){
 	
 }
@@ -43,7 +78,7 @@ function delete_contact(){
 
 			<ul>
 			{context.listC.map((contact) =>
-		//		<ContactCard ind={index} contact={element}/>
+		
       
         <li className="list-group-item" key={contact.id}>
         <div className="row w-100">

@@ -22,9 +22,8 @@ const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
-    const [currentUser, setCurrentUser] = useState( {id:2, user: "Log in"});
-    const [listC, setListC] = useState([{name: 'John Wick', email: 'John@gmail.com',
-phone:'786 378-1478'}]);
+    const [currentUser, setCurrentUser] = useState( [2,"Log in"]);
+    const [listC, setListC] = useState([]);
 	const [favList, setFavList] = useState([]);
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
