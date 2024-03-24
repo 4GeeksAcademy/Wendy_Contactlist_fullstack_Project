@@ -53,15 +53,87 @@ useEffect(() => {
 
 
 
-function delete_contact(){
+function delete_contact(){   
 	
 }
+
+
+
+
+
+
+function add_remove_favorite(elm, pos) {
+    let newArray2 = context.favList.find((element) => element == elm);
+
+    if (!newArray2) {
+        let newArray = [...context.favList];
+
+        newArray.push(context.listC[pos]);
+        context.setFavList(newArray);
+        fetch_add_fav(context.listC[pos].id);
+
+    }
+    else {
+
+        let newArray = context.favList.filter((element, index) => element != elm);
+        fetch_remove_fav(context.listC[pos].id)
+        context.setFavList(newArray);
+
+    }
+}
+
+function fetch_add_fav(fav) {
+    let testArray = [context.currentUser.id, fav];
+
+    console.log('char id to add '+fav)
+    fetch(''+ context.currentUser.id +'/favorite/'+fav+'/t', {
+        method: 'POST', // or 'POST'
+        body: JSON.stringify(testArray),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => {
+            if (!res.ok) throw Error(res.statusText);
+            return res.json();
+        })
+        .then(response => console.log('Success:', response))
+        .catch(error => console.error(error));
+
+
+}
+
+function fetch_remove_fav(fav) {
+    let testArray = [context.currentUser.id, fav];
+    fetch('' + context.currentUser.id + '/favorite/' + fav+'/h', {
+        method: 'DELETE', // or 'POST'
+        body: JSON.stringify(testArray),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => {
+            if (!res.ok) throw Error(res.statusText);
+            return res.json();
+        })
+        .then(response => console.log('Success:', response))
+        .catch(error => console.error(error));
+
+
+}
+
+
+
+
+
+
+
 
 
 	return (
 		<div className="container-fluid">
 			
-            {/* {context.listC.map((contact) =>	)} */}
+         
 
 			<ul>
 			{context.listC.map((contact,id) =>
@@ -74,6 +146,7 @@ function delete_contact(){
             </div>
             <div className="col-12 col-sm-6 col-md-9 text-center text-sm-left">
                 <div className=" float-right">
+                <span onClick={() =>add_remove_favorite()} ><i class="fa-regular fa-heart fa-xl"></i></span>
                      <Link to={`/editcontact`} state={contact} >
                     <button className="btn">
                         <i className="fas fa-pencil-alt mr-3" />

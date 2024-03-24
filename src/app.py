@@ -70,16 +70,6 @@ def serve_any_other_file(path):
 
 
 
-
-# @app.route('/user/<id>/contact/<idf>/?', methods=['DELETE'])
-# def delete_fav2(id,idf):
-#         test= UserFavorite.query.filter_by(user_id=id, people_id=idf).first()
-#         db.session.delete(test)
-#         db.session.commit()
-#         return jsonify(f"Success"), 200
-
-
-
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
