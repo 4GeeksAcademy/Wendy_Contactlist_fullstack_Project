@@ -60,7 +60,7 @@ export const Login = () => {
         let test= [userN,userP]
       
         
-        fetch('/user/login', {
+        fetch(process.env.BACKEND_URL + "/api/user/login/?", {
                 method: 'POST',
                 body: JSON.stringify(test), 
                 headers: {

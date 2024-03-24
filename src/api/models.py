@@ -39,12 +39,11 @@ class Contact(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "user_id": self.user_id,
             "name": self.name,
             "phone": self.phone,
             "address": self.address,
-            "email":self.email,
-            "user_id": self.user_id
-          
+            "email":self.email    
            
         }
     

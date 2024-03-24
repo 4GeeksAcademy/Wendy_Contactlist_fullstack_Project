@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter, Route, Routes,Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext, createContext } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState, createContext } from "react";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
@@ -25,6 +25,14 @@ const Layout = () => {
     const [currentUser, setCurrentUser] = useState( [2,"Log in"]);
     const [listC, setListC] = useState([]);
 	const [favList, setFavList] = useState([]);
+
+
+    // {
+    //     name:'John',
+    //     address: '2937 Utopia dr, Miramar, FL',
+    //     phone: '786 234-4391',
+    //     email: 'John@gmail.com'
+    // }
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 

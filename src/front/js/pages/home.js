@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter, Route, Routes,Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext, createContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext} from "react";
 import { AppContext } from "../layout";
 import { Context } from "../store/appContext";
 import rigoImage from "../../img/rigo-baby.jpg";
@@ -8,12 +8,17 @@ import "../../styles/home.css";
 
 
 export const Home = () => {
-	//const { store, actions } = useContext(Context);
+const { store, actions } = useContext(Context);
   
     const navigate = useNavigate();
     const context = useContext(AppContext);
 
    
+
+     // Do stuff with the JSONified response
+         
+
+  
 
 // 	const signUpButton = document.getElementById('signUp');
 // const signInButton = document.getElementById('signIn');
@@ -28,42 +33,24 @@ export const Home = () => {
 // });
 
 useEffect(() => {
-     let test= context.currentUser[0];
-    let test2='https://verbose-umbrella-x55q9xw6jqpwc44-3001.app.github.dev/'+test+'/contact';
-    console.log(test2)
-    fetch(test2)
+ 
+    fetch(process.env.BACKEND_URL + "/api/user/2/contact")
+        .then(res => {
+            if (!res.ok) throw Error(res.statusText);
+            return res.json();
+        })
         .then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            // Read the response as JSON
-            return response.json();
+        
+           context.setListC(response)
+            
         })
-        .then(responseAsJson => {
-            // Do stuff with the JSONified response
-            let test = []
-            let final = []
-            test = [...responseAsJson.results];
-            console.log(test)
-            test.forEach((elm) => {
-                let test2 = {
-                    id: elm.id,
-                    name: elm.name,
-                    phone: elm.phone,
-                    address: elm.address,
-                    email: elm.email
-                }
-                final.push(test2)
-            })
-             context.setListC(final);
 
-        })
-        .catch(error => {
-            console.log('Looks like there was a problem: \n', error);
-        });
-
+        .catch(error => console.log(error));
 
 }, []);
+
+
+
 
 
 function delete_contact(){
@@ -77,10 +64,10 @@ function delete_contact(){
             {/* {context.listC.map((contact) =>	)} */}
 
 			<ul>
-			{context.listC.map((contact) =>
+			{context.listC.map((contact,id) =>
 		
       
-        <li className="list-group-item" key={contact.id}>
+        <li className="list-group-item" key={id}>
         <div className="row w-100">
             <div className="col-12 col-sm-6 col-md-3 px-0">
                 <img src={rigoImage} alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid" />

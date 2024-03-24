@@ -49,7 +49,6 @@ def handle_invalid_usage(error):
 
 # generate sitemap with all your endpoints
 
-
 @app.route('/')
 def sitemap():
     if ENV == "development":
@@ -57,6 +56,8 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 # any other endpoint will try to serve it like a static file
+
+
 
 
 @app.route('/<path:path>', methods=['GET'])
@@ -68,92 +69,14 @@ def serve_any_other_file(path):
     return response
 
 
-@app.route('/user/login', methods=['POST'])
-def login_test():
-        request_body=request.json
-        
-        test_user= User.query.filter_by(email=request_body[0]).first().id
-        
-        if(test_user):
-            test_password= User.query.filter_by(email=request_body[0]).first().password
-            test_name= User.query.filter_by(email=request_body[0]).first().name
-           
-            if str(test_password)==request_body[1]:  
-                test= {
-                     "user": test_name,
-                     "id": test_user
-                      }         
-                return jsonify(test)
-            else:
-                return jsonify(f"Incorrect email or password"), 400
-                 
-                       
-        else:
-              return jsonify(f"Incorrect email or password"), 400
-       
-        
-@app.route('/user/<int:id>/contact', methods=['GET'])
-def get_conofuser(id):
-
-    test= Contact.query.filter_by(user_id = id)
-    test2 = list(map(lambda x: x.serialize(), test))
-    return jsonify('It works')
-   # return  jsonify(test2)
 
 
-
-@app.route('/user/new', methods=['POST'])
-def add_newuser():
-        request_body=request.json
-        
-        test_user= User.query.filter_by(email=request_body[1]).first()
-    
-        if(test_user):
-             return jsonify(f"User already exists"), 500
-        
-        else:
-             newU=User ( name=request_body[0], email=request_body[1],password= request_body[2] )
-             db.session.add(newU)
-             db.session.commit()
-             return jsonify(f"Success"), 200
-
-
-@app.route('/user/<id>/favorite/<idf>/h', methods=['DELETE'])
-def delete_fav2(id,idf):
-        test= UserFavorite.query.filter_by(user_id=id, people_id=idf).first()
-        db.session.delete(test)
-        db.session.commit()
-        return jsonify(f"Success"), 200
-
-@app.route('/favorite', methods=['GET'])
-def get_all_favorite():
-    
-    fav = UserFavorite.query.all()
-    all_fav = list(map(lambda x: x.serialize(), fav))
-    return jsonify(all_fav), 200
-
-@app.route('/user/all', methods=['GET'])
-def get_all_user():
-    
-    user = User.query.all()
-    all_people = list(map(lambda x: x.serialize(), user))
-    return jsonify(all_people), 200
-
-
-@app.route('/contact/new', methods=['POST'])
-def add_newcontact():
-        request_body=request.json
-        
-        test_contact= Contact.query.filter_by(email=request_body[1]).first()
-    
-        if(test_contact):
-             return jsonify(f"Contact already exists"), 500
-        
-        else:
-             newC=Contact ( name=request_body[0], email=request_body[1],phone= request_body[2],address=request_body[3], user_id=request_body[4])
-             db.session.add(newC)
-             db.session.commit()
-             return jsonify(f"Success"), 200
+# @app.route('/user/<id>/contact/<idf>/?', methods=['DELETE'])
+# def delete_fav2(id,idf):
+#         test= UserFavorite.query.filter_by(user_id=id, people_id=idf).first()
+#         db.session.delete(test)
+#         db.session.commit()
+#         return jsonify(f"Success"), 200
 
 
 
