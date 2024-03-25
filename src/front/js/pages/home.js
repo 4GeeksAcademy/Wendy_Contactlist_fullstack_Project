@@ -13,13 +13,6 @@ const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const context = useContext(AppContext);
 
-   
-
-     // Do stuff with the JSONified response
-         
-
-  
-
 // 	const signUpButton = document.getElementById('signUp');
 // const signInButton = document.getElementById('signIn');
 // const container = document.getElementById('container');
@@ -46,6 +39,7 @@ useEffect(() => {
         })
 
         .catch(error => console.log(error));
+
 
 }, []);
 
@@ -75,50 +69,64 @@ function delete_contact(pos){
 
 
 
-function add_remove_favorite(elm, pos) {
-    let newArray2 = context.favList.find((element) => element == elm);
+function add_remove_favorite(elm) {
 
+    let newArray2 = context.favList.find((element) => element == elm);
+    console.log(elm)
     if (!newArray2) {
         let newArray = [...context.favList];
-
-        newArray.push(context.listC[pos]);
+        newArray.push(elm);
         context.setFavList(newArray);
-        fetch_add_fav(context.listC[pos].id);
+        fetch_add_fav(elm.id);
 
     }
     else {
 
-        let newArray = context.favList.filter((element, index) => element != elm);
-        fetch_remove_fav(context.listC[pos].id)
-        context.setFavList(newArray);
+        let newArray = context.favList.filter((element) => element != elm);
+        fetch_remove_fav(elm.id)
+       context.setFavList(newArray);
+
 
     }
 }
 
 function fetch_add_fav(fav) {
-    let testArray = [context.currentUser.id, fav];
+    let testArray ={
+user_id: context.currentUser[0],
+contact_id:fav
 
-    console.log('char id to add '+fav)
-    fetch(''+ context.currentUser.id +'/favorite/'+fav+'/t', {
-        method: 'POST', // or 'POST'
-        body: JSON.stringify(testArray),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(res => {
-            if (!res.ok) throw Error(res.statusText);
-            return res.json();
-        })
-        .then(response => console.log('Success:', response))
-        .catch(error => console.error(error));
+    }
+
+        fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/fav/new", 
+        {
+            method: 'POST',
+            body: JSON.stringify(testArray),
+          
+            headers: {
+                'Content-Type': 'application/json'
+            }
+
+        
+})
+            .then(res => {
+                if (!res.ok) throw Error(res.statusText);
+                return res.json();
+            })
+            .then(response => {
+            
+           console.log(response)
+            })
+    
+            .catch(error => console.log(error))
+
+
 
 
 }
 
 function fetch_remove_fav(fav) {
     let testArray = [context.currentUser.id, fav];
-    fetch('' + context.currentUser.id + '/favorite/' + fav+'/h', {
+    fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/fav!", {
         method: 'DELETE', // or 'POST'
         body: JSON.stringify(testArray),
         headers: {
@@ -146,6 +154,11 @@ function fetch_remove_fav(fav) {
                 <Link to="/addcontact">
             <button className="btn btn-primary" >Add Contact</button>   
             </Link>
+
+            <Link to='/demo'>
+            <button className="btn btn-success" >My favorites</button> 
+            </Link>
+
             </div>
 			<ul>
 			{context.listC.map((contact,inx) =>
@@ -158,7 +171,7 @@ function fetch_remove_fav(fav) {
             </div>
             <div className="col-12 col-sm-6 col-md-9 text-center text-sm-left">
                 <div className=" float-right">
-                <span onClick={() =>add_remove_favorite()} ><i class="fa-regular fa-heart fa-xl"></i></span>
+                <span onClick={() =>add_remove_favorite(contact)} ><i className={context.favList.includes(contact) ? "fa-solid fa-heart fa-bounce fa-xl testred" : "fa-regular fa-heart fa-bounce fa-xl "}></i></span>
                      <Link to={`/editcontact`} state={contact} >
                     <button className="btn">
                         <i className="fas fa-pencil-alt fa-xl mr-3" />

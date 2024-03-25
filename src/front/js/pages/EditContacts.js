@@ -12,7 +12,7 @@ const data = location.state;
    
 useEffect(() => {
 	context.setTempA(data.address);
-	context.setTempN(data.full_name);
+	context.setTempN(data.name);
 	context.setTempP(data.phone);
 	context.setTempE(data.email);
 
@@ -42,7 +42,7 @@ useEffect(() => {
 
   function updateContact(){
 	let testObj= {
-		full_name: context.tempN , 
+		name: context.tempN , 
 		email: context.tempE,
 		agenda_slug: "Wendy",
 		address: context.tempA,
