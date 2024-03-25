@@ -8,6 +8,7 @@ import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
+import { AddContact } from "./pages/AddContacts";
 import { EditContact } from "./pages/EditContacts";
 import injectContext from "./store/appContext";
 
@@ -27,6 +28,11 @@ const Layout = () => {
     const [listC, setListC] = useState([]);
 	const [favList, setFavList] = useState([]);
 
+    const [tempN, setTempN] = useState('');
+	const [tempP, setTempP] = useState('');
+	const [tempA, setTempA] = useState('');
+	const [tempE, setTempE] = useState('');
+
 
     // {
     //     name:'John',
@@ -45,7 +51,15 @@ const Layout = () => {
                 favList,
                 setFavList,
 				currentUser,
-				setCurrentUser
+				setCurrentUser,
+                tempA,
+				setTempA,
+				tempE,
+				setTempE,
+				tempN,
+				setTempN,
+				tempP,
+				setTempP
 			}} >
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
@@ -55,6 +69,7 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<EditContact />} path="/editcontact"/>
+                        <Route element={<AddContact />} path="/addcontact"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

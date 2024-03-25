@@ -62,7 +62,7 @@ useEffect(() => {
 
 let contact_id= data.id;
 
-	fetch('ddds'+contact_id, {
+	fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/"+contact_id, {
 		method: 'PUT',
 		body: JSON.stringify(testObj), // data can be a 'string' or an {object} which comes from somewhere further above in our application
 		headers: {

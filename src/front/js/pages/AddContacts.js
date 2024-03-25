@@ -1,9 +1,8 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../layout";
-import { useNavigate } from "react-router-dom";
+
 
 export const AddContact = () => {
 
@@ -38,9 +37,9 @@ if(context.tempA.length>10 && context.tempN.length>5 && context.tempE.length>10 
 
 
 	let testObj= {
-		full_name: context.tempN , 
+		name: context.tempN , 
 		email: context.tempE,
-		agenda_slug: "Wendy",
+		user_id: context.currentUser[0],
 		address: context.tempA,
 		phone: context.tempP	
 
@@ -55,9 +54,10 @@ if(context.tempA.length>10 && context.tempN.length>5 && context.tempE.length>10 
 	context.setTempN('');
 
 
-	fetch('https://playground.4geeks.com/apis/fake/contact/', {
+	fetch(process.env.BACKEND_URL+'/api/user/<id>/contact/new', {
 		method: 'POST', // or 'POST'
 		body: JSON.stringify(testObj),
+		mode: 'no-cors',
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -82,7 +82,7 @@ if(context.tempA.length>10 && context.tempN.length>5 && context.tempE.length>10 
 				<h1 className="text-center mt-5">Add a new contact</h1>
 				<form>
 					<div className="form-group">
-						<label>Full Name</label>
+						<label htmlFor="form-control">Full Name</label>
 						<input type="text" className="form-control" placeholder="Full Name"  value={context.tempN} onChange={(e) => temp_name(e)}/>
 					</div>
 					<div className="form-group">

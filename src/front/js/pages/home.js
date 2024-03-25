@@ -75,8 +75,6 @@ function delete_contact(pos){
 
 
 
-
-
 function add_remove_favorite(elm, pos) {
     let newArray2 = context.favList.find((element) => element == elm);
 
@@ -142,14 +140,13 @@ function fetch_remove_fav(fav) {
 
 
 
-
-
-
 	return (
 		<div className="container-fluid">
-			
-         
-
+			<div>
+                <Link to="/addcontact">
+            <button className="btn btn-primary" >Add Contact</button>   
+            </Link>
+            </div>
 			<ul>
 			{context.listC.map((contact,inx) =>
 		

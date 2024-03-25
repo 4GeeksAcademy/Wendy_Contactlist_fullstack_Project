@@ -30,17 +30,16 @@ def delete_contact(id,idc):
 
 
 @api.route('/user/<id>/contact/<idc>', methods=['PUT'])
-def delete_contact(id,idc):
+def update_contact(id,idc):
         request_body= request.json
-        test= Contact.query.filter_by(id=idc).update(
-              {'name': , 'phone':, 'email':, 'address': }
-              )
-        db.session.delete(test)
-        db.session.commit()
+        test= Contact.query.get(idc)
+       
+      #  db.session.commit()
         return jsonify(f"Success"), 200
 
 
-session.query(FoobarModel).filter(FoobarModel.id == foobar_id).update({'name': 'New Foobar Name!'})
+
+#session.query(FoobarModel).filter(FoobarModel.id == foobar_id).update({'name': 'New Foobar Name!'})
 
 
 
@@ -61,16 +60,16 @@ def get_all_user():
     all_user = list(map(lambda x: x.serialize(), user))
     return jsonify(all_user), 200
 
-@api.route('/contact/new', methods=['POST'])
+@api.route('/user/<id>/contact/new', methods=['POST'])
 def add_new_contact():
         request_body=request.json     
-        test_contact= Contact.query.filter_by(email=request_body[1]).first()
+        test_contact= Contact.query.filter_by(email=request_body['email']).first()
     
         if(test_contact):
              return jsonify(f"Contact already exists"), 500
         
         else:
-             newC=Contact ( name=request_body[0], email=request_body[1],phone= request_body[2],address=request_body[3], user_id=request_body[4])
+             newC=Contact( name=request_body['name'], email=request_body['email'],phone= request_body['phone'],address=request_body['address'], user_id=id)
              db.session.add(newC)
              db.session.commit()
              return jsonify(f"Success"), 200
