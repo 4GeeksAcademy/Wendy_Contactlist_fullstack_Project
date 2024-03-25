@@ -21,22 +21,20 @@ useEffect(() => {
         return res.json();
     })
     .then(response => {
-       
-        let test = [...response]
-        let final = [...context.favList]
-        let test2 ={}
-        console.log(test)
-        test.forEach((elm) => {   
-         test2 = context.listC.filter((el) => el.id == elm.contact_id);
-        console.log(test2)
-       
-         
-    })
+                  // context.setFavList(response)
+                 
+                  console.log(context.listC)
+                  let test=[...response];
+                  console.log(test)
+                  let final=[]
+                test.forEach((elm)=>{
+                    let test2 = context.listC.filter((el) => el.id == elm.contact_id);
+					final = final.concat(test2)
+                    console.log(test2)
+					
+                })
 
-           
-                //  context.setFavList(final)
-                console.log(final)
-
+  console.log(final)
     })
 
     .catch(error => console.log(error));

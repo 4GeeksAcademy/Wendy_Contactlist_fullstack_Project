@@ -34,7 +34,8 @@ useEffect(() => {
         })
         .then(response => {
         
-           context.setListC(response)
+          
+            context.setListC(response)
             
         })
 

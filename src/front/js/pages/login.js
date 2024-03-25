@@ -12,6 +12,7 @@ export const Login = () => {
     const [userN, setUserN] = useState('')
     const [userU, setUserU] = useState('')
     const [userP, setUserP] = useState('')
+	const [signingE, setSigningE] = useState('')
     
     const navigate = useNavigate();
     const context = useContext(AppContext);
@@ -26,13 +27,15 @@ export const Login = () => {
 // const signInButton = document.getElementById('signIn');
 // const container = document.getElementById('container');
 
-// signUpButton.addEventListener('click', () => {
-// 	container.classList.add("right-panel-active");
-// });
+function sign_up_effect () {
+ 	//container.classList.add("right-panel-active");
+	 setSigningE("")
+ }
 
-// signInButton.addEventListener('click', () => {
-// 	container.classList.remove("right-panel-active");
-// });
+ function sign_in_effect () {
+ 	//container.classList.remove("right-panel-active");
+	setSigningE("right-panel-active");
+ }
 
 
 
@@ -132,7 +135,7 @@ function fetch_newUser(){
 	return (
 		<div className="body_div">
 			
-<div class="container" id="container">
+<div class="container" id={signingE}>
 	<div class="form-container sign-up-container">
 		<form action="#">
 			<h1>Create Account</h1>

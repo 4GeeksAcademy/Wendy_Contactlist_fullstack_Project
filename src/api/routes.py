@@ -54,9 +54,11 @@ def get_contact_of_user(id):
 
 @api.route('/user/<int:id>/contact/fav', methods=['GET'])
 def get_fav_of_user(id):
-
+    t=[]
     fav= UserFavorite.query.filter_by(user_id=id).all()
     final = list(map(lambda x: x.serialize(), fav)) 
+    
+    
     return  jsonify(final), 200
 
 
