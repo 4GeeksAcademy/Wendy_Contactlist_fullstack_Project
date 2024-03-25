@@ -21,12 +21,27 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route('/user/<id>/contact/<idc>/delete?', methods=['DELETE'])
+@api.route('/user/<id>/contact/<idc>', methods=['DELETE'])
 def delete_contact(id,idc):
-        test= Contact.query.filter_by(user_id=id, id=idc).first()
+        test= Contact.query.filter_by(id=idc).first()
         db.session.delete(test)
         db.session.commit()
         return jsonify(f"Success"), 200
+
+
+@api.route('/user/<id>/contact/<idc>', methods=['PUT'])
+def delete_contact(id,idc):
+        request_body= request.json
+        test= Contact.query.filter_by(id=idc).update(
+              {'name': , 'phone':, 'email':, 'address': }
+              )
+        db.session.delete(test)
+        db.session.commit()
+        return jsonify(f"Success"), 200
+
+
+session.query(FoobarModel).filter(FoobarModel.id == foobar_id).update({'name': 'New Foobar Name!'})
+
 
 
 
@@ -46,7 +61,6 @@ def get_all_user():
     all_user = list(map(lambda x: x.serialize(), user))
     return jsonify(all_user), 200
 
-
 @api.route('/contact/new', methods=['POST'])
 def add_new_contact():
         request_body=request.json     
@@ -60,12 +74,6 @@ def add_new_contact():
              db.session.add(newC)
              db.session.commit()
              return jsonify(f"Success"), 200
-
-
-
-
-
-
 
 
 

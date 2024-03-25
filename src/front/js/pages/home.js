@@ -34,7 +34,7 @@ const { store, actions } = useContext(Context);
 
 useEffect(() => {
  
-    fetch(process.env.BACKEND_URL + "/api/user/2/contact")
+    fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact")
         .then(res => {
             if (!res.ok) throw Error(res.statusText);
             return res.json();
@@ -53,7 +53,22 @@ useEffect(() => {
 
 
 
-function delete_contact(){   
+function delete_contact(pos){   
+
+    
+		let newArray= context.listC.filter((element)=> element.id!=pos);
+		context.setListC(newArray);	
+
+		fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/"+pos, {
+			method: 'DELETE', // or 'POST'
+		})
+			.then(res => {
+				if (!res.ok) throw Error(res.statusText);
+				return res.json();
+			})
+			.then(response => console.log('Success:', response))
+			.catch(error => console.error(error));
+		//	props.onClose();
 	
 }
 
@@ -136,10 +151,10 @@ function fetch_remove_fav(fav) {
          
 
 			<ul>
-			{context.listC.map((contact,id) =>
+			{context.listC.map((contact,inx) =>
 		
       
-        <li className="list-group-item" key={id}>
+        <li className="list-group-item" key={inx}>
         <div className="row w-100">
             <div className="col-12 col-sm-6 col-md-3 px-0">
                 <img src={rigoImage} alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid" />
@@ -149,10 +164,10 @@ function fetch_remove_fav(fav) {
                 <span onClick={() =>add_remove_favorite()} ><i class="fa-regular fa-heart fa-xl"></i></span>
                      <Link to={`/editcontact`} state={contact} >
                     <button className="btn">
-                        <i className="fas fa-pencil-alt mr-3" />
+                        <i className="fas fa-pencil-alt fa-xl mr-3" />
                     </button>
                     </Link> 
-                     <button className="btn" onClick={() =>delete_contact()}> 
+                     <button className="btn" onClick={() =>delete_contact(contact.id)}> 
                      <i className="fas fa-trash-alt fa-bounce fa-xl" />
                    </button> 
 

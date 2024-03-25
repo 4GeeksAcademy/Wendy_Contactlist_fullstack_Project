@@ -46,7 +46,8 @@ useEffect(() => {
 		email: context.tempE,
 		agenda_slug: "Wendy",
 		address: context.tempA,
-		phone: context.tempP	
+		phone: context.tempP,	
+		user_id: context.currentUser[0]
 	}
 	
 	let newArray= [... context.listC];
@@ -61,7 +62,7 @@ useEffect(() => {
 
 let contact_id= data.id;
 
-	fetch('https://playground.4geeks.com/apis/fake/contact/'+contact_id, {
+	fetch('ddds'+contact_id, {
 		method: 'PUT',
 		body: JSON.stringify(testObj), // data can be a 'string' or an {object} which comes from somewhere further above in our application
 		headers: {
