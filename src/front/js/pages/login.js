@@ -74,7 +74,7 @@ function sign_up_effect () {
                 })
                 .then(response => {
                  context.setCurrentUser(response);
-                 navigate('/home')
+                // navigate('/home')
 				
 				  
                 
