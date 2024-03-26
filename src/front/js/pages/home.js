@@ -71,32 +71,32 @@ function delete_contact(pos){
 
 
 function add_remove_favorite(elm) {
-
-    let newArray2 = context.favList.find((element) => element == elm);
-    console.log(elm)
-    if (!newArray2) {
+    
+    
+    let testArray = context.favList.find((el) => el.id === elm.id);
+    console.log('first test', testArray)
+    if (!testArray) {
         let newArray = [...context.favList];
         newArray.push(elm);
-        context.setFavList(newArray);
-        fetch_add_fav(elm.id);
+        console.log('new like adddedd', newArray)
+      context.setFavList(newArray);
+       
+       fetch_add_fav(elm.id);
 
     }
     else {
 
-        let newArray = context.favList.filter((element) => element != elm);
-        fetch_remove_fav(elm.id)
-       context.setFavList(newArray);
+        let newArray2 = context.favList.filter((el) => el.id!= elm.id);
+        console.log('If it already exist', newArray2)
+      // fetch_remove_fav(elm.id)
+         context.setFavList(newArray2);
 
 
     }
 }
 
 function fetch_add_fav(fav) {
-    let testArray ={
-user_id: context.currentUser[0],
-contact_id:fav
-
-    }
+    let testArray =[context.currentUser[0],fav]
 
         fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/fav/new", 
         {
@@ -119,15 +119,13 @@ contact_id:fav
             })
     
             .catch(error => console.log(error))
-
-
-
-
 }
+
+
 
 function fetch_remove_fav(fav) {
     let testArray = [context.currentUser.id, fav];
-    fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/fav!", {
+    fetch(process.env.BACKEND_URL + "/api/user/"+context.currentUser[0]+"/contact/fav/delete?", {
         method: 'DELETE', // or 'POST'
         body: JSON.stringify(testArray),
         headers: {
@@ -140,7 +138,6 @@ function fetch_remove_fav(fav) {
         })
         .then(response => console.log('Success:', response))
         .catch(error => console.error(error));
-
 
 }
 

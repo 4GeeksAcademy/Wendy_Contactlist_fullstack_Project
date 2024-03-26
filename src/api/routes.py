@@ -56,16 +56,16 @@ def add_newuser():
 
 
 
-@api.route('/user/<int:id>/contact/<int:idc>/fav/new', methods=['POST'])
-def add_fav_to_user(id,idc):
-     
-     newC=UserFavorite(user_id=id, contact_id=idc)
+@api.route('/user/<int:id>/contact/fav/new', methods=['POST'])
+def add_fav_to_user(id):
+     request_body=request.json
+     newC=UserFavorite(user_id=request_body[0], contact_id=request_body[1])
      db.session.add(newC)
      db.session.commit()
      return  jsonify(f"Success"), 200
 
 
-@api.route('/user/<int:id>/contact/icd/fav', methods=['DELETE'])
+@api.route('/user/<int:id>/contact/fav/delete?', methods=['DELETE'])
 def remove_fav_from_user(id):
     request_body=request.json
     removeC=UserFavorite.query.filter(user_id=request_body[0], contact_id=request_body[1]).first()

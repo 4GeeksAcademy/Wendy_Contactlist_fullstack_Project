@@ -28,12 +28,12 @@ export const Login = () => {
 
 function sign_up_effect () {
  	//container.classList.add("right-panel-active");
-	 setSigningE("")
+	 setSigningE("right-panel-active")
  }
 
  function sign_in_effect () {
- 	//container.classList.remove("right-panel-active");
-	setSigningE("right-panel-active");
+
+	setSigningE("");
  }
 
 

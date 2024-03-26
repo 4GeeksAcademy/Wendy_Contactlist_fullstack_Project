@@ -24,8 +24,8 @@ useEffect(() => {
                   // context.setFavList(response)
                  
                   let test=[...response];
-                  console.log(test)
-                  let final=[]
+                 
+                  let final=[...context.favList]
                  test.forEach((elm)=>{
                     context.listC.forEach((el) =>{
                         if( el.id == elm.contact_id){
@@ -36,6 +36,8 @@ useEffect(() => {
                         
                         })
                       context.setFavList(final);
+                      
+                     
 				
                  })
  
