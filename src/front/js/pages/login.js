@@ -1,15 +1,14 @@
 import React from "react";
-import { BrowserRouter, Route, Routes,Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext, createContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import { AppContext } from "../layout";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 
 export const Login = () => {
 	//const { store, actions } = useContext(Context);
-    const [userN, setUserN] = useState('')
+    const [userE, setUserE] = useState('')
     const [userU, setUserU] = useState('')
     const [userP, setUserP] = useState('')
 	const [signingE, setSigningE] = useState('')
@@ -46,7 +45,7 @@ function sign_up_effect () {
     
     function get_email(val) {
         let test = val.target.value;
-        setUserN(test)
+        setUserE(test)
     }
 
     function get_password(val) {
@@ -56,14 +55,13 @@ function sign_up_effect () {
 
 
     function login_function() {
-        if(userLabel[0]=='Username'){
+     
 
-        if (userN.length > 5 && userP.length >5) {
+        if (userE.length > 5 && userP.length >5) {
 
-        let test= [userN,userP]
-      
-        
-        fetch(process.env.BACKEND_URL + "/api/user/login/?", {
+        let test= [userE,userP]
+   
+        fetch(process.env.BACKEND_URL + "/api/user/login", {
                 method: 'POST',
                 body: JSON.stringify(test), 
                 headers: {
@@ -75,41 +73,30 @@ function sign_up_effect () {
                     return res.json();
                 })
                 .then(response => {
-                    context.setCurrentUser(response);
-                    navigate('/')
+                 context.setCurrentUser(response);
+                 navigate('/home')
+				
+				  
                 
                 } )
-                .catch(error => alert(error));    
+                .catch(error =>  console.log(error));    
            
         }
 
         else {
             alert('Please enter a valid username and/or password')
-            setUserN('')
+            setUserE('')
             setUserP('')
         }
-    }
-    else{
-        let test=['Username', 'Email','Password', 'Log in'];
-        setUserLabel(test)
-        if (userN.length > 5 && userP.length >5 && userU.length>5) {
-            fetch_newUser();
-        }
-        else {
-            alert('Please enter a valid username, email and/or password')
-            setUserN('')
-            setUserP('')
-            setUserU('')
-        }
-
-       
 
 
-    }
+	}
+
+
 function fetch_newUser(){
    
-		let testArray = [userU,userN,userP];
-		fetch('', {
+		let testArray = [userU,userE,userP];
+		fetch(process.env.BACKEND_URL + "/api/user/new", {
 			method: 'POST',
 			body: JSON.stringify(testArray),
 			headers: {
@@ -120,15 +107,18 @@ function fetch_newUser(){
 				if (!res.ok) throw Error(res.statusText);
 				return res.json();
 			})
-			.then(response => console.log('Success:', response))
+			.then(response => {
+				setUserE('')
+				setUserP('')
+				setUserU('')
+				console.log('Success:', response)
+
+			})
 			.catch(error => console.error(error));
 
-
-	
 }
 
-
-	}
+	
 
 
 
@@ -146,9 +136,8 @@ function fetch_newUser(){
 			</div>
 			<span>or use your email for registration</span>
 
-         {/* <input type="" placeholder="username" style={userLabel[0]=='Username'? {display:'none' } : {display:'block' }} value={userU} id="username" onChange={(e) => get_username(e)} /> */}
-
-			<input type="text" placeholder="Name" onChange={(e) => get_email(e)}/>
+       
+			<input type="text" placeholder="Name" onChange={(e) => get_username(e)}/>
 			<input type="email" placeholder="Email"  onChange={(e) => get_email(e)} />
 			<input type="password" placeholder="Password"  onChange={(e) => get_password(e)}/>
 			<button >Sign Up</button>
@@ -156,17 +145,17 @@ function fetch_newUser(){
 	</div>
 	<div class="form-container sign-in-container">
 		<form action="#">
-			<span onClick={() => login_function()}> <h1>Sign in</h1> </span>
+			<span > <h1>Sign in</h1> </span>
 			<div class="social-container">
 				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
 				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>
 			<span>or use your account</span>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
+			<input type="email" placeholder="Email" onChange={(e) => get_email(e)}/>
+			<input type="password" placeholder="Password"   onChange={(e) => get_password(e)}/>
 			<a href="#">Forgot your password?</a>
-			<button>Sign In</button>
+			<button onClick={() => login_function()}> Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">

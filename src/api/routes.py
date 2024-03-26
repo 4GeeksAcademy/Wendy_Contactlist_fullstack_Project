@@ -21,40 +21,17 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route('/user/<id>/contact/<idc>', methods=['DELETE'])
-def delete_contact(id,idc):
-        test= Contact.query.filter_by(id=idc).first()
-        db.session.delete(test)
-        db.session.commit()
-        return jsonify(f"Success"), 200
-
-
-@api.route('/user/<id>/contact/<idc>', methods=['PUT'])
-def update_contact(id, idc):
-        request_body= request.json
-        test= Contact.query.get(idc)
-        db.session.query(Contact).filter(Contact.id==idc).update({'name' :request_body['name'], 'address':request_body['address'] ,'phone':request_body['phone'], 'email':request_body['email'], 'user_id':id})
-        db.session.commit()
-        return jsonify(f"Success"), 200
 
 
 
 
 
 
-
-@api.route('/user/<int:id>/contact', methods=['GET'])
-def get_contact_of_user(id):
-
-    contact= Contact.query.filter_by(user_id = id)
-    final = list(map(lambda x: x.serialize(), contact))
-   
-    return  jsonify(final)
 
 
 @api.route('/user/<int:id>/contact/fav', methods=['GET'])
 def get_fav_of_user(id):
-    t=[]
+   
     fav= UserFavorite.query.filter_by(user_id=id).all()
     final = list(map(lambda x: x.serialize(), fav)) 
     
@@ -62,9 +39,26 @@ def get_fav_of_user(id):
     return  jsonify(final), 200
 
 
+@api.route('/user/new', methods=['POST'])
+def add_newuser():
+        request_body=request.json
+        
+        test_user= User.query.filter_by(email=request_body[1]).first()
+    
+        if(test_user):
+             return jsonify(f"User already exists"), 500
+        
+        else:
+             newU=User ( name=request_body[0], email=request_body[1],password= request_body[2] )
+             db.session.add(newU)
+             db.session.commit()
+             return jsonify(f"Success"), 200
+
+
+
 @api.route('/user/<int:id>/contact/<int:idc>/fav/new', methods=['POST'])
 def add_fav_to_user(id,idc):
-     request_body=request.json
+     
      newC=UserFavorite(user_id=id, contact_id=idc)
      db.session.add(newC)
      db.session.commit()
@@ -80,6 +74,10 @@ def remove_fav_from_user(id):
     return  jsonify(removeC), 200
 
     
+
+
+
+
 
 
 
@@ -105,11 +103,7 @@ def add_new_contact():
              return jsonify(f"Success"), 200
 
 
-
-
-
-
-@api.route('/user/login/?', methods=['POST'])
+@api.route('/user/login', methods=['POST'])
 def login_test():
         request_body=request.json
         
@@ -120,10 +114,8 @@ def login_test():
             test_name= User.query.filter_by(email=request_body[0]).first().name
            
             if str(test_password)==request_body[1]:  
-                test= {
-                     "user": test_name,
-                     "id": test_user
-                      }         
+                test=[test_user, test_name]   
+                    
                 return jsonify(test)
             else:
                 return jsonify(f"Incorrect email or password"), 400
@@ -133,3 +125,27 @@ def login_test():
               return jsonify(f"Incorrect email or password"), 400
        
         
+
+@api.route('/user/<id>/contact/<idc>', methods=['DELETE'])
+def delete_contact(idc):
+        test= Contact.query.filter_by(id=idc).first()
+        db.session.delete(test)
+        db.session.commit()
+        return jsonify(f"Success"), 200
+
+
+@api.route('/user/<id>/contact/<idc>', methods=['PUT'])
+def update_contact(id, idc):
+        request_body= request.json
+        test= Contact.query.get(idc)
+        db.session.query(Contact).filter(Contact.id==idc).update({'name' :request_body['name'], 'address':request_body['address'] ,'phone':request_body['phone'], 'email':request_body['email'], 'user_id':id})
+        db.session.commit()
+        return jsonify(f"Success"), 200
+
+@api.route('/user/<int:id>/contact', methods=['GET'])
+def get_contact_of_user(id):
+
+    contact= Contact.query.filter_by(user_id = id)
+    final = list(map(lambda x: x.serialize(), contact))
+   
+    return  jsonify(final)
